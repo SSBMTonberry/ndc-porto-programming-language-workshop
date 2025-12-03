@@ -1,0 +1,19 @@
+function foo(x,y) {
+    print x
+    print y
+    return x + y
+}
+
+print foo(2,3)
+
+function add(x,y) {
+    return x + y
+}
+
+function multipry(x,y,z) {
+    return x * y * z
+}
+
+print add(2,3)
+print multipry(3,3,3)
+print 3+4+5/7
