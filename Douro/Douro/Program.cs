@@ -8,6 +8,7 @@ if (args.Length < 1) {
 
 string filename = args[0];
 string source = File.ReadAllText(filename);
+// string source = "print 1 + 2 * 3 / 7";
 
 DouroEnvironment env = new();
 DouroParser parser = new();

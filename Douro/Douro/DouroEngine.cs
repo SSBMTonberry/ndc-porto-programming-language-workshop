@@ -28,6 +28,9 @@ public class DouroEngine(DouroEnvironment env) {
 
 	private Value Eval(Binary b) => b.Operator switch {
 		Operator.Add => Eval(b.Lhs) + Eval(b.Rhs),
+		Operator.Subtract => Eval(b.Lhs) - Eval(b.Rhs),
+		Operator.Multiply => Eval(b.Lhs) * Eval(b.Rhs),
+		Operator.Divide => Eval(b.Lhs) / Eval(b.Rhs),
 		_ => throw new NotImplementedException($"I don't know how to {b.Operator}")
 	};
 
