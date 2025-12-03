@@ -2,6 +2,6 @@ using Douro.Values;
 
 namespace Douro.Statements;
 
-public class Print(Expr expr) : ExprStatement(expr)
+public class Return(Expr expr) : ExprStatement(expr)
 {
 }
