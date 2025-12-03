@@ -1,0 +1,7 @@
+function foo(x,y) {
+    print x
+    print y
+    return print x + y
+}
+
+print foo(2,3)

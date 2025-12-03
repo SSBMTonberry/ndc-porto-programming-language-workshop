@@ -18,5 +18,10 @@
 	<ItemGroup>
 		<Watch Include="douro.peg" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Content\program.dro">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 </Project>

@@ -1,8 +1,9 @@
 namespace Douro.Values;
 
-public enum Operator {
-	Add,
-	Subtract,
-	Multiply,
-	Divide
+public enum Operator
+{
+    Add,
+    Subtract,
+    Multiply,
+    Divide
 }
