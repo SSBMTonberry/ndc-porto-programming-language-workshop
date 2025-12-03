@@ -94,5 +94,3 @@ EOL = [\n\r]+
 EOF = !.
     / unexpected:.
         #error{ $"Unexpected '{unexpected}' at line {state.Line}, col {state.Column - 1}" }
-
-

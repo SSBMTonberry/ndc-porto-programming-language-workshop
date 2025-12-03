@@ -1,19 +1,20 @@
 using Douro;
+using Douro.Statements;
 
 if (args.Length < 1) {
 	Console.WriteLine("Usage: Douro <source-file>");
 	Environment.Exit(1);
 }
 
-var filename = args[0];
-var source = File.ReadAllText(filename);
+string filename = args[0];
+string source = File.ReadAllText(filename);
 
-var env = new DouroEnvironment();
-var parser = new DouroParser();
-var engine = new DouroEngine(env);
+DouroEnvironment env = new();
+DouroParser parser = new();
+DouroEngine engine = new(env);
 
 Console.WriteLine(source);
-var program = parser.Parse(source);
+DouroProgram? program = parser.Parse(source);
 Console.WriteLine(program);
 Console.WriteLine("============");
 engine.Run(program);
