@@ -4,10 +4,10 @@
 @classname DouroParser
 
 program<DouroProgram>
-	= stmt:statement EOS? rest:program {
+	= ws stmt:statement ws rest:program {
 		rest.Insert(stmt)
 	}
-	/ EOF { new DouroProgram() }
+	/ ws { new DouroProgram() }
 
 statement<Statement>
 	= function
@@ -16,18 +16,18 @@ statement<Statement>
 	/ return
 
 function <Statement>
-	= "function" _ name:identifier _? '(' args:identifier_list ')' _? '{' _? EOL+
-		_? body:statement_list EOL*
-		'}'
+	= "function" _ name:identifier __ '(' __ args:identifier_list __ ')' __ '{' __ EOL+
+		__ body:statement_list EOL*
+		__ '}'
 	{
 			new Assign(name, new Function(args, body))
 	}
 
 statement_list <List<Statement>>
-	= _? head:statement EOS+ tail:statement_list {
+	= __ head:statement EOS+ tail:statement_list {
 		(new List<Statement> { head }).Concat(tail).ToList()
 	}
-	/ _? stmt:statement { new List<Statement> { stmt } }
+	/ __ stmt:statement { new List<Statement> { stmt } }
 
 return<Statement>
 	= "return" _ expr:expression {
@@ -40,7 +40,7 @@ EOS = EOL // End of statement
 identifier = ("" [a-zA-Z_][a-zA-Z0-9_]*)
 
 assign<Statement> =
-	"let" _ name:identifier _? "=" _? expr:expression {
+	"let" _ name:identifier __ "=" __ expr:expression {
 		new Assign(name, expr)
 	};
 
@@ -52,32 +52,38 @@ print<Statement> =
 expression <Expr> = sum
 
 sum <Expr> -memoize
-	= lhs:product _? "+" _? rhs:sum	{ new Binary(lhs, rhs, Operator.Add) }
-	/ lhs:product _? "-" _? rhs:sum	{ new Binary(lhs, rhs, Operator.Subtract) }
+	= lhs:product __ "+" __ rhs:sum	{ new Binary(lhs, rhs, Operator.Add) }
+	/ lhs:product __ "-" __ rhs:sum	{ new Binary(lhs, rhs, Operator.Subtract) }
 	/ product
 
 product <Expr> -memoize
-	= lhs:product _? "/" _? rhs:primary { new Binary(lhs, rhs, Operator.Divide) }
-	/ lhs:product _? "*" _? rhs:primary { new Binary(lhs, rhs, Operator.Multiply) }
+	= lhs:product __ "/" __ rhs:primary { new Binary(lhs, rhs, Operator.Divide) }
+	/ lhs:product __ "*" __ rhs:primary { new Binary(lhs, rhs, Operator.Multiply) }
 	/ primary
 
 primary
 	= number
+	/ print_expr
 	/ function_call
 	/ lookup
 
+print_expr <Expr>
+	= "print" _ expr:expression { new PrintExpr(expr) }
+
 function_call <Expr>
-	= name:identifier _? '(' args:arg_list ')' { new FunctionCall(name, args) }
+	= name:identifier __ '(' __ args:arg_list __ ')' { new FunctionCall(name, args) }
 
 arg_list<List<Expr>>
-	= head:expression _? ',' _? tail:arg_list
+	= head:expression __ ',' __ tail:arg_list
 		{ (new List<Expr> { head }).Concat(tail).ToList() }
 	/ arg:expression { new List<Expr> { arg } }
+	/ "" { new List<Expr>() }
 
 identifier_list<List<string>>
-	= head:identifier _? ',' _? tail:identifier_list
+	= head:identifier __ ',' __ tail:identifier_list
 		{ (new List<string> { head }).Concat(tail).ToList() }
 	/ name:identifier { new List<string> { name} }
+	/ "" { new List<string>() }
 
 lookup <Expr> = name:identifier {
 		new Lookup(name)
@@ -89,6 +95,8 @@ number <Expr> =
 	}
 
 _ = [ \t]+ ;
+__ = [ \t]* ;
+ws = [ \t\n\r]* ;
 EOL = [\n\r]+
 
 EOF = !.

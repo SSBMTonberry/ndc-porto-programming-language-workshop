@@ -46,10 +46,17 @@ public class DouroEngine(DouroEnvironment env) {
 	public Value Eval(Expr expr) => expr switch {
 		Binary binary => Eval(binary),
 		Lookup lookup => env.Lookup(lookup.Name),
+		PrintExpr printExpr => EvalPrint(printExpr),
 		Value v => v,
 		FunctionCall f => Call(f),
 		_ => throw new NotImplementedException($"I don't know how to evaluate {expr.GetType()}")
 	};
+
+	private Value EvalPrint(PrintExpr printExpr) {
+		var value = Eval(printExpr.Expr);
+		Console.WriteLine(value);
+		return value;
+	}
 
 	public Value Run(Statement statement) {
 		switch (statement) {
